@@ -1,22 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { View, Text, StyleSheet } from "react-native"
+// import Game from './Game';
 
 class App extends React.Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>TargetSum</Text>
-            </View>
-        );
-    }
-};
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#234',
-        flex: 1,
-    },
-});
-
+  render() {
+    return <Game randomCount={6} />;
+  }
+}
+import Game from './Game';
 export default App;
