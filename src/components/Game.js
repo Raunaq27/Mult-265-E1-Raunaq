@@ -7,7 +7,7 @@ import {View, StyleSheet, Text} from 'react-native';
 import RandomNumber from './RandomNumber';
 
 class Game extends React.Component {
-  static PropTypes = {
+  static propTypes = {
     randomCount: propTypes.number.isRequired,
   };
 
@@ -39,24 +39,29 @@ class Game extends React.Component {
       return 'playing';
     }
     if (sumSelected === this.target) {
-      return 'W';
+      return 'WON';
     }
     if (sumSelected > this.target) {
-      return 'L';
+      return 'LOST';
     }
   };
+
   render() {
-    const gameStatus_1 = this.gameStatus();
+    const gameStatus = this.gameStatus();
     return (
       <View style={styles.container}>
-        <Text style={styles.target}>{this.target}</Text>
+        <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>
+          {this.target}
+        </Text>
         <View style={styles.randomContainer}>
           {this.randomNumbers.map((randomNumber, index) => (
             <RandomNumber
               key={index}
               id={index}
               number={randomNumber}
-              isSelected={this.isNumberSelected(index)}
+              isSelected={
+                this.isNumberSelected(index) || gameStatus !== 'playing'
+              }
               onPress={this.selectNumber}
             />
 
@@ -65,7 +70,6 @@ class Game extends React.Component {
             // </Text>
           ))}
         </View>
-        <Text style={styles.target}>{gameStatus_1}</Text>
       </View>
     );
   }
@@ -79,7 +83,6 @@ const styles = StyleSheet.create({
   },
   target: {
     fontSize: 40,
-    backgroundColor: '#DDD',
     margin: 50,
     textAlign: 'center',
   },
@@ -96,6 +99,13 @@ const styles = StyleSheet.create({
     marginVertical: 25,
     fontSize: 35,
     textAlign: 'center',
+  },
+
+  STATUS_WON: {
+    backgroundColor: 'green',
+  },
+  STATUS_LOST: {
+    backgroundColor: 'red',
   },
 });
 
