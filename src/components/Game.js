@@ -9,10 +9,12 @@ import RandomNumber from './RandomNumber';
 class Game extends React.Component {
   static propTypes = {
     randomCount: propTypes.number.isRequired,
+    intialSec: propTypes.number.isRequired,
   };
 
   state = {
     selectedIds: [],
+    remainingSec: this.props.intialSec,
   };
 
   randomNumbers = Array.from({length: this.props.randomCount}).map(
@@ -22,6 +24,23 @@ class Game extends React.Component {
     .slice(0, this.props.randomCount - 2)
     .reduce((acc, curr) => acc + curr, 0);
 
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      this.setState(
+        prevState => {
+          return {remainingSec: prevState.remainingSec - 1};
+        },
+        () => {
+          if (this.state.remainingSec === 0) {
+            clearInterval(this.intervalId);
+          }
+        },
+      );
+    }, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
   isNumberSelected = noIndex => {
     return this.state.selectedIds.indexOf(noIndex) >= 0;
   };
@@ -35,6 +54,9 @@ class Game extends React.Component {
     const sumSelected = this.state.selectedIds.reduce((acc, curr) => {
       return acc + this.randomNumbers[curr];
     }, 0);
+    if (this.state.remainingSec === 0) {
+      return 'LOST';
+    }
     if (sumSelected < this.target) {
       return 'playing';
     }
@@ -70,6 +92,7 @@ class Game extends React.Component {
             // </Text>
           ))}
         </View>
+        <Text>{this.state.remainingSec}</Text>
       </View>
     );
   }

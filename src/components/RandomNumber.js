@@ -12,6 +12,9 @@ class RandomNumber extends React.Component {
     onPress: propTypes.func.isRequired,
   };
   handlePress = () => {
+    if (this.props.isSelected) {
+      return;
+    }
     this.props.onPress(this.props.id);
   };
 

@@ -4,7 +4,7 @@ import React from 'react';
 
 class App extends React.Component {
   render() {
-    return <Game randomCount={6} />;
+    return <Game randomCount={6} intialSec={10} />;
   }
 }
 import Game from './Game';
